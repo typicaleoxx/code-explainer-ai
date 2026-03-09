@@ -1,44 +1,29 @@
-# this module defines the structured prompt sent to the Gemini model
-# separating prompts from application logic makes it easier to improve instructions later
+def build_prompt(code, structure_analysis):
 
+    return f"""
+You are a senior software engineer performing a code review.
 
-# build_prompt receives the user code and constructs a structured analysis request
-def build_prompt(code_snippet: str) -> str:
+Static analysis of the code:
 
-    # this instruction tells the AI to behave like a senior engineer performing a code review
-    prompt = f"""
-You are a senior software engineer performing a professional code review.
+Functions: {structure_analysis["functions"]}
+Loops: {structure_analysis["loops"]}
+Conditionals: {structure_analysis["conditionals"]}
+Assignments: {structure_analysis["assignments"]}
+Function Calls: {structure_analysis["function_calls"]}
+Imports: {structure_analysis["imports"]}
+Security warnings: {structure_analysis["security_warnings"]}
 
-Analyze the following code and produce a structured report.
+Code:
 
-Your report must contain these sections.
+{code}
 
-Code Summary
-Explain what the code is intended to do.
+Provide:
 
-Logic Explanation
-Explain how the code works step by step.
-
-Execution Walkthrough
-Simulate what happens during program execution.
-
-Code Quality Issues
-Identify poor practices or maintainability concerns.
-
-Performance Analysis
-Explain time complexity and inefficiencies.
-
-Security Concerns
-Identify unsafe patterns or vulnerabilities.
-
-Improved Version
-Provide a cleaner refactored version of the code.
-
-Here is the code to analyze:
-
-{code_snippet}
-
-Return the analysis using clear section headings.
+1. Code Summary
+2. Logic Explanation
+3. Execution Walkthrough
+4. Code Quality Issues
+5. Performance Analysis
+6. Security Concerns
+7. Improved Version
 """
-
-    return prompt
