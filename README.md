@@ -1,25 +1,31 @@
-<<<<<<< HEAD
-# code-explainer-ai
-The system will be a public AI developer tool that analyzes pasted code and generates a structured engineering report.
-=======
 ---
-title: Code Explainer Ai
-emoji: 🚀
-colorFrom: red
-colorTo: red
+title: Code Explainer AI
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
 sdk: docker
-app_port: 8501
-tags:
-- streamlit
+app_file: app.py
 pinned: false
-short_description: Streamlit template space
-license: mit
 ---
 
-# Welcome to Streamlit!
+# Code Explainer AI
 
-Edit `/src/streamlit_app.py` to customize this app to your heart's desire. :heart:
+Paste a code snippet and receive a structured engineering analysis.
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
->>>>>>> b93c97e2637a8dd6dbf8d422647b51010460833d
+This tool analyzes code and provides:
+
+- Code summary
+- Logic explanation
+- Execution walkthrough
+- Code quality issues
+- Performance analysis
+- Security concerns
+- Improved version of the code
+
+The application is built with:
+
+- Python
+- Streamlit
+- OpenRouter API
+- Docker
+- HuggingFace Spaces
