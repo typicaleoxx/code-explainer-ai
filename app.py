@@ -6,6 +6,7 @@ import streamlit as st
 
 from prompt_template import build_prompt
 from ai_client import generate_explanation
+from parser import parse_analysis
 
 
 # configure page settings
@@ -47,18 +48,40 @@ if st.button("Analyze Code"):
 
     else:
 
-        # show the code with syntax highlighting
+        # show the submitted code with syntax highlighting
         st.subheader("Submitted Code")
         st.code(code_input, language="python")
 
         # build the prompt sent to the AI model
         prompt = build_prompt(code_input)
 
-        # show a spinner while the model processes the request
+        # show loading spinner while AI processes request
         with st.spinner("Analyzing code..."):
 
             result = generate_explanation(prompt)
 
-        # display the AI analysis
-        st.subheader("AI Analysis")
-        st.markdown(result)
+        # parse the AI response into structured sections
+        analysis = parse_analysis(result)
+
+        # render the parsed sections
+
+        st.subheader("Code Summary")
+        st.write(analysis["Code Summary"])
+
+        st.subheader("Logic Explanation")
+        st.write(analysis["Logic Explanation"])
+
+        st.subheader("Execution Walkthrough")
+        st.write(analysis["Execution Walkthrough"])
+
+        st.subheader("Code Quality Issues")
+        st.write(analysis["Code Quality Issues"])
+
+        st.subheader("Performance Analysis")
+        st.write(analysis["Performance Analysis"])
+
+        st.subheader("Security Concerns")
+        st.write(analysis["Security Concerns"])
+
+        st.subheader("Improved Version")
+        st.code(analysis["Improved Version"], language="python")
