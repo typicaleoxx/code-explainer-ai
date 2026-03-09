@@ -7,6 +7,7 @@ import streamlit as st
 from prompt_template import build_prompt
 from ai_client import generate_explanation
 from parser import parse_analysis
+from static_analyzer import analyze_code_structure
 
 
 # configure page settings
@@ -52,18 +53,32 @@ if st.button("Analyze Code"):
         st.subheader("Submitted Code")
         st.code(code_input, language="python")
 
-        # build the prompt sent to the AI model
-        prompt = build_prompt(code_input)
+        # run static AST analysis on the submitted code
+        structure_analysis = analyze_code_structure(code_input)
 
-        # show loading spinner while AI processes request
+        # display static analysis results to the user
+        st.subheader("Static Code Analysis")
+
+        if "error" in structure_analysis:
+            st.error(structure_analysis["error"])
+            st.stop()
+
+        else:
+            st.json(structure_analysis)
+
+        # build the prompt sent to the AI model including AST signals
+        prompt = build_prompt(code_input, structure_analysis)
+
+        # show loading spinner while the AI processes the request
         with st.spinner("Analyzing code..."):
 
+            # send prompt to the AI model
             result = generate_explanation(prompt)
 
         # parse the AI response into structured sections
         analysis = parse_analysis(result)
 
-        # render the parsed sections
+        # render the parsed sections in the UI
 
         st.subheader("Code Summary")
         st.write(analysis["Code Summary"])
