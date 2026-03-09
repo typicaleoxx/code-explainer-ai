@@ -1,46 +1,64 @@
-# this file defines the Streamlit web interface
-# it handles user interaction and communicates with the backend AI logic
+# this file defines the Streamlit user interface
+# it allows a user to paste code and receive an AI generated analysis
 
 
 import streamlit as st
 
-from gemini_client import generate_explanation
 from prompt_template import build_prompt
+from ai_client import generate_explanation
 
 
-# configure the page title shown in the browser
-st.set_page_config(page_title="Code Intelligence AI")
+# configure page settings
+st.set_page_config(page_title="Code Intelligence AI", layout="wide")
 
 
-# display the application title
+# main title displayed in the browser
 st.title("Code Intelligence AI")
 
 
-# short description shown under the title
-st.write("Paste code and receive a structured engineering analysis.")
+# short explanation of what the tool does
+st.markdown(
+    """
+Paste a code snippet and receive a structured engineering analysis.
+
+The AI will analyze:
+
+• Code purpose  
+• Logic breakdown  
+• Execution walkthrough  
+• Code quality issues  
+• Performance analysis  
+• Security concerns  
+• Refactored version
+"""
+)
 
 
-# create a large text input area where users paste their code
+# create a large input box for the user to paste code
 code_input = st.text_area("Paste your code here", height=300)
 
 
-# create a button that triggers the AI analysis
+# analyze button triggers the AI analysis
 if st.button("Analyze Code"):
 
-    # ensure the user provided code before sending a request
+    # ensure the user entered code
     if code_input.strip() == "":
         st.warning("Please paste some code before analyzing.")
 
     else:
 
-        # build the AI prompt using the provided code
+        # show the code with syntax highlighting
+        st.subheader("Submitted Code")
+        st.code(code_input, language="python")
+
+        # build the prompt sent to the AI model
         prompt = build_prompt(code_input)
 
-        # show a loading indicator while the AI processes the request
+        # show a spinner while the model processes the request
         with st.spinner("Analyzing code..."):
 
-            # send the prompt to Gemini and retrieve the explanation
-            explanation = generate_explanation(prompt)
+            result = generate_explanation(prompt)
 
-        # display the AI generated report
-        st.markdown(explanation)
+        # display the AI analysis
+        st.subheader("AI Analysis")
+        st.markdown(result)
